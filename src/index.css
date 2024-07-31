@@ -1,0 +1,44 @@
+/*Layout 레이아웃*/
+* {
+    font-family: 'Pretendard';
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main {
+    width: 100vw;
+}
+
+/*기본세팅 - 입력창*/
+input, textarea, select {
+    border: 1px solid #d0d0d0;
+    padding: 0 5px;
+    border-radius: 6px;
+    height: 30px;
+
+    &::placeholder {
+        color: #aaa;
+    }
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+select, input {
+    padding: 5px;
+    color: #6e6e6e;
+    border: 1px solid #dddddf;
+    border-radius: 5px;
+}
+
+/*배너*/
+.banner{
+    width: 100%;
+    background-image: url("../public/douzone_banner.png");
+    height: 420px;
+    border-radius: 15px;
+}
