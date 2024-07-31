@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import Button from "../button.tsx";
 import { isBusinessNumber } from "../../api/stomAndFlood.ts";
+import RainIcon from '../../assets/images/icon/icon_rain.png';
+import CloseIcon from '../../assets/images/icon/close.png';
+import PrevIcon from '../../assets/images/icon/back.png';
 
 //팝업 열고 닫기 뒤로가기 구현
 interface PopupProps {
@@ -43,7 +46,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                 return (
                     <>
                         <div className={'flex justify-end'}>
-                            <img src={'../../public/icon/close.png'} className={'cursor-pointer h-[20px]'}
+                            <img src={CloseIcon} className={'cursor-pointer h-[20px]'} alt={'닫기'}
                                  onClick={onClose}/>
                         </div>
                         <div className={'flex justify-between'}>
@@ -53,7 +56,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                                     복구 비용을<br/>최대 5천만원까지 보상해드립니다. (가입기간 1년, 이후 갱신)
                                 </div>
                             </div>
-                            <img src={'../../public/icon/icon_rain.png'} width={120} className={'mt-3'}/>
+                            <img src={RainIcon} width={120} className={'mt-3'} alt={'우산아이콘'}/>
                         </div>
                         <div className={'mt-8 flex justify-end'}>
                             <Button color={'blue'} fill={false} width={160} height={30} textSize={16}
@@ -81,9 +84,9 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                 return (
                     <>
                         <div className={'flex justify-between'}>
-                            <img src={'../../public/icon/back.png'} className={'cursor-pointer h-[20px]'}
+                            <img src={PrevIcon} className={'cursor-pointer h-[20px]'} alt={'뒤로가기'}
                                  onClick={goBack}/>
-                            <img src={'../../public/icon/close.png'} className={'cursor-pointer h-[20px]'}
+                            <img src={CloseIcon} className={'cursor-pointer h-[20px]'} alt={'닫기'}
                                  onClick={onClose}/>
                         </div>
                         <div>
@@ -110,9 +113,9 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                 return (
                     <>
                         <div className={'flex justify-between'}>
-                            <img src={'../../public/icon/back.png'} className={'cursor-pointer h-[20px]'}
+                            <img src={PrevIcon} className={'cursor-pointer h-[20px]'} alt={'뒤로가기'}
                                  onClick={goBack}/>
-                            <img src={'../../public/icon/close.png'} className={'cursor-pointer h-[20px]'}
+                            <img src={CloseIcon} className={'cursor-pointer h-[20px]'} alt={'닫기'}
                                  onClick={onClose}/>
                         </div>
                         <div>
@@ -133,7 +136,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                 return (
                     <>
                         <div className={'flex justify-end'}>
-                            <img src={'../../public/icon/close.png'} className={'cursor-pointer h-[20px]'}
+                            <img src={CloseIcon} className={'cursor-pointer h-[20px]'} alt={'닫기'}
                                  onClick={onClose}/>
                         </div>
                         <div className={'flex flex-col items-center'}>
