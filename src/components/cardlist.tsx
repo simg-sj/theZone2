@@ -2,13 +2,14 @@ import React, {useEffect, useState} from 'react';
 import Button from "./button.tsx";
 import { CarPopup } from './popup/popup_car.tsx';
 import { RainPopup } from './popup/popup_rain.tsx';
-
+import CarIcon from '../assets/images/icon/icon_car.png';
+import RainIcon from '../assets/images/icon/icon_rain.png';
 
 // 팝업 컴포넌트
 const Popup: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div className="bg-white px-10 py-8 rounded-xl shadow-[0_2px_30px_5px_rgba(0,0,0,0.3)]">
+            <div className="bg-white px-10 py-8 rounded-xl shadow-[0_2px_30px_5px_rgba(0,0,0,0.3)] max-h-[700px] overflow-y-auto overflow-x-hidden">
                 {children}
             </div>
         </div>
@@ -46,7 +47,7 @@ const Card: React.FC<CardProps> = ({ imagePath, title, content, tag, PopupCompon
              onClick={handleCardClick}>
             <div>
                 <div className={"flex"}>
-                    <img src={imagePath} width={50} className={'mr-3'}/>
+                    <img src={imagePath} alt={title} width={50} className={'mr-3'}/>
                     <div className="font-semibold mt-3">{title}</div>
                 </div>
                 <div className={'mt-3 text-gray-700 break-keep text-base whitespace-pre-line'}>{content}</div>
@@ -69,15 +70,15 @@ export default function CardList() {
     return (
         <div className="flex flex-wrap">
             <Card
-                imagePath="../../public/icon/icon_car.png"
+                imagePath={CarIcon}
                 title="자동차 보험"
                 content="타는 만큼 내는 쉽고 간편한 자동차보험"
                 tag="#교통 #단체보험 #개인보험"
                 PopupComponent={CarPopup}
             />
             <Card
-                imagePath="../../public/icon/icon_rain.png"
-                title="풍수재해보험"
+                imagePath={RainIcon}
+                title="풍수해보험"
                 content="소상공인 풍수해보험(Ⅳ) 전액지원!
                           자연재해로 인한 피해보장"
                 tag="#소상공인 #단체보험 #개인보험"

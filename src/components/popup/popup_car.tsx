@@ -1,4 +1,4 @@
-import React, {useState, lazy, Suspense} from "react";
+import React, {useState} from "react";
 import Button from "../button.tsx";
 import ProvisionDetails from "../privacy/provision.tsx";
 import MarketingDetails from "../privacy/marketing.tsx";
@@ -6,10 +6,10 @@ import CollectDetails from "../privacy/collect.tsx";
 import DbLogo from '../../assets/images/logo/db_logo.png';
 import HyundaiLogo from '../../assets/images/logo/hyundai_logo.png';
 import SimgLogo from '../../assets/images/logo/simg_logo.png';
-import KbLogo from '../../assets/images/logo/kb_logo.png'
-import CloseIcon from '../../assets/images/icon/close.png'
-import PrevIcon from '../../assets/images/icon/back.png'
-import CarIcon from '../../assets/images/icon/icon_car.png'
+import KbLogo from '../../assets/images/logo/kb_logo.png';
+import CloseIcon from '../../assets/images/icon/close.png';
+import PrevIcon from '../../assets/images/icon/back.png';
+import CarIcon from '../../assets/images/icon/icon_car.png';
 //팝업 열고 닫기
 interface PopupProps {
     onClose: () => void;
@@ -139,9 +139,9 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
                 return (
                     <>
                         <div className={'flex justify-between'}>
-                            <img src={PrevIcon} className={'cursor-pointer h-[20px]'}
+                            <img src={PrevIcon} className={'cursor-pointer h-[20px]'} alt={'뒤로가기'}
                                  onClick={goBack}/>
-                            <img src={CloseIcon} className={'cursor-pointer h-[20px]'}
+                            <img src={CloseIcon} className={'cursor-pointer h-[20px]'} alt={'닫기'}
                                  onClick={onClose}/>
                         </div>
                         <div className={'flex justify-between'}>
@@ -247,7 +247,7 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
                 return (
                     <>
                         <div className={'flex justify-end'}>
-                            <img src={'../../public/icon/close.png'} className={'cursor-pointer h-[20px]'}
+                            <img src={CloseIcon} className={'cursor-pointer h-[20px]'} alt={'닫기'}
                                  onClick={onClose}/>
                         </div>
                         <div className={'flex flex-col items-center'}>
