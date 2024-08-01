@@ -1,7 +1,7 @@
 import React from "react";
 
 // 필요한 컬러 추가
-type colorType = "blue" | "lightblue" | "gray" | "white";
+type colorType = "blue" | "lightblue" | "red" | "gray" | "white";
 
 interface Button extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     rounded?: boolean;
@@ -14,25 +14,28 @@ interface Button extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 // 버튼 배경 색상
-const bgColor: { blue: string; white: string; lightblue: string; gray: string } = {
+const bgColor: { blue: string; white: string; lightblue: string; gray: string; red: string; } = {
     blue: "bg-[#4986fc]",
     lightblue: "bg-[#91b6ff]",
     gray: "bg-[#c3c3c3]",
     white: "bg-[#ffffff]",
+    red: "bg-[#ff5f5f]",
 }
 // 버튼 테두리 색상
-const borderColor: { blue: string; white: string; lightblue: string; gray: string } = {
+const borderColor: { blue: string; white: string; lightblue: string; gray: string; red: string; } = {
     blue: "border-[#4986fc]",
     lightblue: "border-[#91b6ff]",
     gray: "border-[#c3c3c3]",
     white: "border-[#ffffff]",
+    red: "border-[#ff5f5f]",
 }
 // 버튼 글자 색상
-const textColor: { blue: string; white: string; lightblue: string; gray: string } = {
+const textColor: { blue: string; white: string; lightblue: string; gray: string; red: string; } = {
     blue: "text-[#4986fc]",
     lightblue: "text-[#91b6ff]",
     gray: "text-[#c3c3c3]",
     white: "text-[#ffffff]",
+    red: "text-[#ff5f5f]",
 };
 
 // 버튼 라운드, 컬러, 폰트두께 설정
