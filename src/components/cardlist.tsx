@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Button from "./button.tsx";
 import { CarPopup } from './popup/popup_car.tsx';
 import { RainPopup } from './popup/popup_rain.tsx';
@@ -6,10 +6,25 @@ import CarIcon from '../assets/images/icon/icon_car.png';
 import RainIcon from '../assets/images/icon/icon_rain.png';
 
 // 팝업 컴포넌트
-const Popup: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const Popup: React.FC<{ children: React.ReactNode; onClose: () => void }> = ({ children, onClose }) => {
+    const popupRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+                onClose();
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [onClose]);
+
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div className="bg-white px-10 py-8 rounded-xl shadow-[0_2px_30px_5px_rgba(0,0,0,0.3)] max-h-[700px] overflow-y-auto overflow-x-hidden">
+            <div ref={popupRef} className="bg-white px-10 rounded-xl shadow-[0_2px_30px_5px_rgba(0,0,0,0.3)] max-h-[700px] overflow-y-auto overflow-x-hidden">
                 {children}
             </div>
         </div>
@@ -34,17 +49,19 @@ const Card: React.FC<CardProps> = ({ imagePath, title, content, tag, PopupCompon
     const handleClosePopup = () => {
         setShowPopup(false);
     };
+
     useEffect(() => {
         if (showPopup) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'auto';
         }
-    },[showPopup])
+    }, [showPopup]);
+
     return (
         <>
-        <div className="bg-[#fcfcfc] text-lg p-5 rounded-xl w-[350px] h-[260px] mx-[25px] shadow-md flex flex-col justify-between mt-[60px] hover:shadow-xl"
-             onClick={handleCardClick}>
+            <div className="bg-[#fcfcfc] text-lg p-5 rounded-xl w-[350px] h-[260px] mx-[25px] shadow-md flex flex-col justify-between mt-[60px] cursor-pointer hover:shadow-xl"
+                 onClick={handleCardClick}>
             <div>
                 <div className={"flex"}>
                     <img src={imagePath} alt={title} width={50} className={'mr-3'}/>
@@ -58,7 +75,7 @@ const Card: React.FC<CardProps> = ({ imagePath, title, content, tag, PopupCompon
             </div>
         </div>
             {showPopup && (
-                <Popup>
+                <Popup onClose={handleClosePopup}>
                     <PopupComponent onClose={handleClosePopup} />
                 </Popup>
             )}

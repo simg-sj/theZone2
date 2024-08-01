@@ -21,32 +21,26 @@ const App: React.FC = () => {
                     <div className={'pt-[100px] text-3xl font-semibold'}>고객센터</div>
                     <div className={'pt-[30px] text-xl accent-gray-600 '}>보험료산출, 보험가입, 보험청구 등 보험관련 문의는 해당 보험사에 직접 문의 바랍니다</div>
                     <div className={'flex justify-between mt-12'}>
-                        <div className={'w-[200px]'}>
-                            <div className={'text-lg px-2'}>DB 손해보험</div>
-                            <div className={'border-b-gray-400 border-b-2 mt-2 mb-4'}></div>
-                            <div className={'px-2'}>0000-0000</div>
-                        </div>
-                        <div className={'w-[200px]'}>
-                            <div className={'text-lg px-2'}>KB 손해보험</div>
-                            <div className={'border-b-gray-400 border-b-2 mt-2 mb-4'}></div>
-                            <div className={'px-2'}>0000-0000</div>
-                        </div>
-                        <div className={'w-[200px]'}>
-                            <div className={'text-lg px-2'}>현대해상</div>
-                            <div className={'border-b-gray-400 border-b-2 mt-2 mb-4'}></div>
-                            <div className={'px-2'}>0000-0000</div>
-                        </div>
-                        <div className={'w-[200px]'}>
-                            <div className={'text-lg px-2'}>풍수해보험관련</div>
-                            <div className={'border-b-gray-400 border-b-2 mt-2 mb-4'}></div>
-                            <div className={'px-2'}>0000-0000</div>
-                        </div>
+                        <CustomerServiceItem title="DB 손해보험" phone="0000-0000" />
+                        <CustomerServiceItem title="KB 손해보험" phone="0000-0000" />
+                        <CustomerServiceItem title="현대해상" phone="0000-0000" />
+                        <CustomerServiceItem title="풍수해보험관련" phone="0000-0000" />
                     </div>
                     {/*E : 고객센터*/}
                 </div>
             </main>
     );
 };
+
+function CustomerServiceItem({ title, phone }: { title: string; phone: string }) {
+    return (
+        <div className={'w-[200px]'}>
+            <div className={'text-lg px-2'}>{title}</div>
+            <div className={'border-b-gray-400 border-b-2 mt-2 mb-4'}></div>
+            <div className={'px-2'}>{phone}</div>
+        </div>
+    );
+}
 
 
 export default App
