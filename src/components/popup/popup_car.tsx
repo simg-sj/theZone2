@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, {useState, useCallback} from 'react';
 import Button from "../button.tsx";
 import ProvisionDetails from "../privacy/provision.tsx";
 import MarketingDetails from "../privacy/marketing.tsx";
@@ -10,6 +10,7 @@ import KbLogo from '../../assets/images/logo/kb_logo.png';
 import CloseIcon from '../../assets/images/icon/close.png';
 import PrevIcon from '../../assets/images/icon/back.png';
 import CarIcon from '../../assets/images/icon/icon_car.png';
+
 
 // **팝업
 //팝업 열고 닫기
@@ -94,20 +95,20 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
     const [phone, setPhone] = useState<string>('');
     const [desiredInsurance, setDesiredInsurance] = useState<string>('');
 
-// 이름 유효성 검사 및 입력 제한 : 숫자입력불가능, 최대 20자 입력가능
+    // 이름 유효성 검사 및 입력 제한 : 숫자입력불가능, 최대 20자 입력가능
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const noNumbersValue = value.replace(/[0-9]/g, '');
         setName(noNumbersValue.slice(0, 20)); // 최대 20자로 제한
     };
 
-// 전화번호 유효성 검사 및 입력 제한 : 숫자만 입력가능
+    // 전화번호 유효성 검사 및 입력 제한 : 숫자만 입력가능
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.replace(/[^\d]/g, '');
         setPhone(value);
     };
 
-// 가입희망보험 입력 제한 : 최대 50자 입력가능
+    // 가입희망보험 입력 제한 : 최대 50자 입력가능
     const handleDesiredInsuranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         if (value.length <= 50) {
@@ -115,7 +116,7 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
         }
     };
 
-// 전화번호 유효성 검사 함수 : 전화번호 포맷 확인 모바일, 국제, 국내 번호만 가능
+    // 전화번호 유효성 검사 함수 : 전화번호 포맷 확인 모바일, 국제, 국내 번호만 가능
     const isValidPhone = useCallback((phone: string): boolean => {
         const mobileRegex = /^01[016789]\d{7,8}$/;
         const internationalRegex = /^00[1-9]\d{8,}$/;

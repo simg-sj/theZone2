@@ -96,7 +96,7 @@ export default function CardList() {
             <Card
                 imagePath={RainIcon}
                 title="풍수해보험"
-                content="소상공인 풍수해보험(Ⅳ) 전액지원!
+                content="소상공인 풍수해보험(Ⅳ) 정부지원!
                           자연재해로 인한 피해보장"
                 tag="#소상공인 #단체보험 #개인보험"
                 PopupComponent={RainPopup}
