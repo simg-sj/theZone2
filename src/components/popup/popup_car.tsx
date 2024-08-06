@@ -10,6 +10,7 @@ import KbLogo from '../../assets/images/logo/kb_logo.png';
 import CloseIcon from '../../assets/images/icon/close.png';
 import PrevIcon from '../../assets/images/icon/back.png';
 import CarIcon from '../../assets/images/icon/icon_car.png';
+import {cnstCarApi1001} from "../../api/cnstCar.ts";
 
 
 // **팝업
@@ -139,7 +140,6 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
             return;
         }
 
-        console.log(checkboxes);
         let params = {
             cName : name,
             cCell : phone,
@@ -148,11 +148,18 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
             provision : checkboxes.provision ? 'Y' : 'N',
         }
 
-        console.log(params);
 
-        //const result = cnstCarApi1001(params);
+        const statusCode = await cnstCarApi1001(params);
 
-        //navigateTo('complete');
+
+        console.log(statusCode)
+
+        if(statusCode === '200'){
+            navigateTo('complete')
+        }else {
+            alert("서비스 오류")
+        }
+
     };
 
     // ** 팝업 내용
