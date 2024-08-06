@@ -8,7 +8,7 @@ const App: React.FC = () => {
 
     return (
             <main className={'my-8'}>
-                <div className={'w-[1200px] mx-auto'}>
+                <div className={'w-[1160px] h-[1600px]  mx-auto'}>
                     {/*S : 배너*/}
                     <div className={'banner'}></div>
                     {/*E : 배너*/}
