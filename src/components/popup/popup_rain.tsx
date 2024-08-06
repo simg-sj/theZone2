@@ -10,6 +10,7 @@ import SelectButtonGroup from "../selectbutton.tsx";
 import CollectDetails from "../privacy/collect.tsx";
 import ProvisionDetails from "../privacy/provision.tsx";
 import MarketingDetails from "../privacy/marketing.tsx";
+import DaumPost from "./daumPost.tsx";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -40,6 +41,8 @@ const downloadInsuranceTerms = () => {
 export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
     const [viewHistory, setViewHistory] = useState<ViewType[]>(['main']);
     const [bNo, setBNo] = useState<string>('');
+    //const [bName, setBName] = useState<string>('');
+
 
     const navigateTo = (view: ViewType) => {
         setViewHistory(prev => [...prev, view]);
@@ -121,7 +124,8 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
     const [name, setName] = useState<string>('');
     const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
-    const [adress, setAdress] = useState<string>('');
+    const [address, setAddress] = useState<string>('');
+    const [buildName, setBuildName] = useState<string>('');
     const [area, setArea] = useState<string>('');
 
     // 이름 유효성 검사 및 입력 제한 : 숫자입력불가능, 최대 20자 입력가능
@@ -143,10 +147,10 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
         setEmail(value.slice(0, 50)); // 최대 50자로 제한
     };
     // 사업장주소 유효성 검사 및 입력 제한 : 최대 50자
-    const handleAdressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleBuildNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         if (value.length <= 50) {
-            setAdress(value);
+            setBuildName(value);
         }
     };
     // 사업장면적 유효성 검사 및 입력 제한 : 숫자만 입력가능
@@ -195,7 +199,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             alert('사업장면적을 입력해주세요.');
             return;
         }
-        if (adress.length < 1) {
+        if (address.length < 1) {
             alert('사업장 주소를 입력해주세요.');
             return;
         }
@@ -205,15 +209,26 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
     const onClickHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         //1288716058
+        /*let param = {
+            businesses : [
+                {
+                    "b_no" : bNo,
+                    "b_nm" : bName
+                }
+            ]
+        };*/
         let param = {
-            b_no: [bNo]
-        };
-        let result = await isBusinessNumber(param);
-        if (result.b_stt_cd === '01') {
+            "q" : bNo,
+            "type" : 'json'
+        }
+        let result: any = await isBusinessNumber(param);
+        console.log(result);
+       /* if (result.length > 0) {
             navigateTo('information');  // 유효한 경우 'information' 페이지로 이동
         } else {
             navigateTo('warning');  // 유효하지않은 경우 'warning' 페이지로 이동
-        }
+        }*/
+        navigateTo('information');  // 유효한 경우 'information' 페이지로 이동
     }
     //풍수해보험 메인
     const renderView = () => {
@@ -244,10 +259,11 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                                 보험약관 다운받기
                             </Button>
                         </div>
-                        <div className={'mt-7'}>
+                        {/*<div className={'mt-7'}>
                             <div className={'text-lg text-gray-800 px-3 py-2'}>사업장명</div>
-                            <input type={"text"} className={'w-full h-[35px] p-5 rounded-xl'}/>
-                        </div>
+                            <input type={"text"} className={'w-full h-[35px] p-5 rounded-xl'}
+                                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBName(e.currentTarget.value)}/>
+                        </div>*/}
                         <div className={'mt-7'}>
                             <div className={'text-lg text-gray-800 px-3 py-2'}>사업자등록번호</div>
                             <input type={"number"} className={'w-full h-[35px] p-5 rounded-xl'} maxLength={10}
@@ -281,8 +297,8 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                         <div className={'mt-7 relative'}>
                             <div className={'text-lg text-gray-800 px-3 py-2'}>사업장주소</div>
                             <input type={"text"} className={'w-full h-[35px] p-5 rounded-xl cursor-pointer'}
-                                   onClick={() => navigateTo('address')}/>
-                            <input type={"text"} value={adress} onChange={handleAdressChange}
+                                   onClick={() => navigateTo('address')} value={address} readOnly={true} />
+                            <input type={"text"} defaultValue={buildName} onChange={handleBuildNameChange}
                                    className={'w-full h-[35px] p-5 rounded-xl mt-2'}
                                    placeholder={'동, 호수 등 기타주소를 입력해주세요'}/>
                         </div>
@@ -325,25 +341,9 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             //풍수해보험 주소검색
             case 'address':
                 return (
-                    <>
-                        <div className={'flex justify-between fixed bg-white w-[600px] py-6'}>
-                            <img src={PrevIcon} className={'cursor-pointer h-[20px]'} alt={'뒤로가기'}
-                                 onClick={goBack}/>
-                            <img src={CloseIcon} className={'cursor-pointer h-[20px]'} alt={'닫기'}
-                                 onClick={onClose}/>
+                        <div className={'mt-7 h-[600px]'}>
+                            <DaumPost goBack={goBack} onClose={onClose} setAddress={setAddress} setBuildName={setBuildName} />
                         </div>
-                        <div className={'pt-[55px]'}>
-                            <div className={'font-medium mt-4 text-2xl'}>사업장 주소를 검색해주세요</div>
-                            <div className={'text-xl mt-2'}>건축물 대장을 기준으로 정확하게 입력해주세요</div>
-                        </div>
-                        <div className={'mt-7'}>
-                            <div className={'text-lg text-gray-800 px-3 py-2'}>daum 주소 검색 api 불러오기</div>
-                        </div>
-                        <Button color={'blue'} fill={true} width={600} height={50} textSize={20}
-                                className={'mt-[60px]'} rounded={true} onClick={goBack}>
-                            확인
-                        </Button>
-                    </>
                 );
             //풍수해보험 개인정보처리동의
             case 'privacy':

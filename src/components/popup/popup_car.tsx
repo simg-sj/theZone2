@@ -125,7 +125,7 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
     }, []);
 
     //유호성검사 실패시 나오는 경고 문구
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (name.length < 2) {
             alert('올바른 성함을 입력해주세요.');
             return;
@@ -138,7 +138,21 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
             alert('필수 개인정보 동의에 체크해주세요.');
             return;
         }
-        navigateTo('complete');
+
+        console.log(checkboxes);
+        let params = {
+            cName : name,
+            cCell : phone,
+            collect : checkboxes.collect ? 'Y' : 'N',
+            marketing : checkboxes.marketing ? 'Y' : 'N',
+            provision : checkboxes.provision ? 'Y' : 'N',
+        }
+
+        console.log(params);
+
+        //const result = cnstCarApi1001(params);
+
+        //navigateTo('complete');
     };
 
     // ** 팝업 내용
