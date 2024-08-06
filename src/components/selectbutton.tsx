@@ -38,25 +38,28 @@ const SelectButton: React.FC<SelectButtonProps> = ({
 // SelectButtonGroup 컴포넌트는 이전과 동일합니다.
 
 //버튼 데이터 타입정의
-interface ButtonData {
-    id: string | number;
-    text: string;
-}
+// interface ButtonData {
+//     id: string | number;
+//     text: string;
+// }
 
 //SelectButtonGroup 컴포넌트 props 타입 정의
 interface SelectButtonGroupProps {
-    buttons: ButtonData[];
-    activeColor: string;
-    inactiveColor: string;
+    buttons: Array<{ id: string; text: string; className?: string }>,
+    activeColor: string,
+    inactiveColor: string,
+    onChange: (selected: string) => void;
 }
 
 //SelectButtonGroup 컴포넌트 정의
-const SelectButtonGroup: React.FC<SelectButtonGroupProps> = ({buttons, activeColor, inactiveColor}) => {
+const SelectButtonGroup: React.FC<SelectButtonGroupProps> = ({buttons, activeColor, inactiveColor, onChange}) => {
     // 현재 활성화된 버튼의 ID를 저장하는 상태 (초기 상태를 첫 번째 버튼의 id로 설정)
     const [activeButtonId, setActiveButtonId] = useState<string | number>(buttons[0].id);
+
     //버튼 클릭시 동작
     const handleButtonClick = (id: string | number): void => {
         setActiveButtonId(id);
+        onChange(id.toString()); // 부모 컴포넌트에 선택된 값을 전달
     };
 
     return (

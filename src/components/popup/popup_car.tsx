@@ -4,12 +4,12 @@ import ProvisionDetails from "../privacy/provision.tsx";
 import MarketingDetails from "../privacy/marketing.tsx";
 import CollectDetails from "../privacy/collect.tsx";
 import DbLogo from '../../assets/images/logo/db_logo.png';
-import HyundaiLogo from '../../assets/images/logo/hyundai_logo.png';
 import SimgLogo from '../../assets/images/logo/simg_logo.png';
 import KbLogo from '../../assets/images/logo/kb_logo.png';
 import CloseIcon from '../../assets/images/icon/close.png';
 import PrevIcon from '../../assets/images/icon/back.png';
 import CarIcon from '../../assets/images/icon/icon_car.png';
+import SelectButtonGroup from "../selectbutton.tsx";
 
 
 // **팝업
@@ -19,10 +19,18 @@ interface PopupProps {
 }
 
 //팝업 내용 타입정의
-type ViewType = 'main' | 'information' | 'complete';
+type ViewType = 'main' | 'select' | 'information' | 'complete';
 
 
 export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
+
+    //버튼선택
+    const user = [
+        {id: 'personal', text: "개인"},
+        {id: 'corporate', text: "법인", className: "ml-10"},
+    ];
+    const [userType, setUserType] = useState<'personal' | 'corporate'>('personal');
+
 
     //케이스따라 팝업 내용변경, 뒤로가기 구현
     const [viewHistory, setViewHistory] = useState<ViewType[]>(['main']);
@@ -141,11 +149,11 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
 
         console.log(checkboxes);
         let params = {
-            cName : name,
-            cCell : phone,
-            collect : checkboxes.collect ? 'Y' : 'N',
-            marketing : checkboxes.marketing ? 'Y' : 'N',
-            provision : checkboxes.provision ? 'Y' : 'N',
+            cName: name,
+            cCell: phone,
+            collect: checkboxes.collect ? 'Y' : 'N',
+            marketing: checkboxes.marketing ? 'Y' : 'N',
+            provision: checkboxes.provision ? 'Y' : 'N',
         }
 
         console.log(params);
@@ -156,13 +164,56 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
     };
 
     // ** 팝업 내용
-    //자동차보험 메인
+    //자동차보험 메인 개인 법인 선택
     const renderView = () => {
         switch (currentView) {
             case 'main':
                 return (
                     <>
                         <div className={'flex justify-end fixed bg-white w-[550px] py-6'}>
+                            <img src={CloseIcon} className={'cursor-pointer h-[20px]'} alt={'닫기'}
+                                 onClick={onClose}/>
+                        </div>
+                        <div className={'flex pt-[55px]'}>
+                            <div>
+                                <div className={'font-medium mt-4 text-2xl'}>자동차 보험 가입하기</div>
+                                <div className={'text-xl mt-2 tracking-wide'}>자동차 보험 가입 대상을 선택해주세요</div>
+                            </div>
+                        </div>
+                        <div className={'mt-7'}>
+                            <div className={'text-lg text-gray-800 px-3 py-2'}>가입 대상</div>
+                            <SelectButtonGroup
+                                buttons={user}
+                                activeColor="bg-blue-400 text-white rounded-xl w-[255px] h-[45px]"
+                                inactiveColor="text-gray-400 border-inherit border-2 rounded-xl w-[255px] h-[45px]"
+                                onChange={(selected) => {
+                                    setUserType(selected as 'personal' | 'corporate');
+                                }}
+                            />
+                        </div>
+                        <Button
+                            color={'blue'}
+                            fill={true}
+                            width={550}
+                            height={50}
+                            textSize={20}
+                            className={'mt-[60px]'}
+                            rounded={true}
+                            onClick={() => {
+                                console.log('Confirm clicked, userType:', userType);
+                                navigateTo('select');
+                            }}
+                        >
+                            확인
+                        </Button>
+                    </>
+                );
+            case 'select':
+                return (
+                    <>
+                        <div className={'flex justify-between fixed bg-white w-[550px] py-6'}>
+                            <img src={PrevIcon} className={'cursor-pointer h-[20px]'} alt={'뒤로가기'}
+                                 onClick={goBack}/>
                             <img src={CloseIcon} className={'cursor-pointer h-[20px]'} alt={'닫기'}
                                  onClick={onClose}/>
                         </div>
@@ -174,22 +225,22 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
                             <img src={CarIcon} width={150} alt={'자동차 아이콘'}/>
                         </div>
                         <div className={'flex flex-wrap'}>
-                            <div onClick={() => window.open("https://simg.kr/")}
-                                 className="bg-[#fcfcfc] text-lg p-5 rounded-xl w-[230px] h-[160px] mx-[20px] shadow-md flex flex-col justify-between hover:shadow-xl relative cursor-pointer">
+                            <div
+                                onClick={() => {
+                                    window.open(userType === 'personal' ? "https://db-personal.com" : "https://db-corporate.com");
+                                }}
+                                className="bg-[#fcfcfc] text-lg p-5 rounded-xl w-[230px] h-[160px] mx-[20px] shadow-md flex flex-col justify-between hover:shadow-xl relative cursor-pointer">
                                 DB 손해보험
                                 <img src={DbLogo} width={180}
                                      className={'absolute right-4 bottom-4'} alt={'DB 손해보험'}/>
                             </div>
-                            <div onClick={() => window.open("https://simg.kr/")}
-                                 className="bg-[#fcfcfc] text-lg p-5 rounded-xl w-[230px] h-[160px] mx-[20px] shadow-md flex flex-col justify-between hover:shadow-xl relative cursor-pointer">
+                            <div
+                                onClick={() => {
+                                    window.open(userType === 'personal' ? "https://kb-personal.com" : "https://kb-corporate.com");
+                                }}
+                                className="bg-[#fcfcfc] text-lg p-5 rounded-xl w-[230px] h-[160px] mx-[20px] shadow-md flex flex-col justify-between hover:shadow-xl relative cursor-pointer">
                                 KB 손해보험
                                 <img src={KbLogo} width={190}
-                                     className={'absolute right-4 bottom-4'}/>
-                            </div>
-                            <div onClick={() => window.open("https://simg.kr/")}
-                                 className="bg-[#fcfcfc] text-lg p-5 rounded-xl w-[230px] h-[160px] mx-[20px] shadow-md flex flex-col justify-between mt-[30px] hover:shadow-xl relative cursor-pointer">
-                                현대해상
-                                <img src={HyundaiLogo} width={160}
                                      className={'absolute right-4 bottom-4'}/>
                             </div>
                             <div onClick={() => navigateTo('information')}
@@ -218,7 +269,8 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
                         <div className={'flex justify-between pt-[55px]'}>
                             <div>
                                 <div className={'font-medium mt-4 text-2xl'}>개인정보처리 동의</div>
-                                <div className={'text-xl mt-2 tracking-wide'}>보험가입 상담을 위해 개인정보를 입력해주세요. <br/> 맞춤보험 상담신청시
+                                <div className={'text-xl mt-2 tracking-wide'}>보험가입 상담을 위해 개인정보를 입력해주세요. <br/> 맞춤보험
+                                    상담신청시
                                     확인 후 맞춤 보험 안내전화를 드립니다
                                 </div>
                             </div>
