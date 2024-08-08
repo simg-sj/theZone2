@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import Button from "../button.tsx";
 import ProvisionDetails from "../privacy/provision.tsx";
 import MarketingDetails from "../privacy/marketing.tsx";
@@ -149,6 +149,7 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
         }
 
         let params = {
+            pdtType : 'car',
             cName: name,
             cCell: phone,
             collect: checkboxes.collect ? 'Y' : 'N',
@@ -169,6 +170,7 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
         }
 
     };
+
 
     // ** 팝업 내용
     //자동차보험 메인 개인 법인 선택
@@ -234,7 +236,7 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
                         <div className={'flex flex-wrap'}>
                             <div
                                 onClick={() => {
-                                    window.open(userType === 'personal' ? "https://db-personal.com" : "https://db-corporate.com");
+                                    window.open(userType === 'personal' ? "https://www.directdb.co.kr/product/at/pvuatarc/step1/formStepPre.do?partner_code=C869" : "https://www.directdb.co.kr/copr/atarc/step1/formStepPreView.do?partner_code=C876");
                                 }}
                                 className="bg-[#fcfcfc] text-lg p-5 rounded-xl w-[230px] h-[160px] mx-[20px] shadow-md flex flex-col justify-between hover:shadow-xl relative cursor-pointer">
                                 DB 손해보험
@@ -243,7 +245,7 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
                             </div>
                             <div
                                 onClick={() => {
-                                    window.open(userType === 'personal' ? "https://kb-personal.com" : "https://kb-corporate.com");
+                                    window.open(userType === 'personal' ? "https://direct.kbinsure.co.kr/home/#/MAIN_0001M?pid=1090049&code=1136" : "https://direct.kbinsure.co.kr/home/#/MAIN_0004M?pid=1090049&code=1136");
                                 }}
                                 className="bg-[#fcfcfc] text-lg p-5 rounded-xl w-[230px] h-[160px] mx-[20px] shadow-md flex flex-col justify-between hover:shadow-xl relative cursor-pointer">
                                 KB 손해보험

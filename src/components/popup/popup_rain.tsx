@@ -1,6 +1,6 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import Button from "../button.tsx";
-import {isBusinessNumber} from "../../api/stomAndFlood.ts";
+import {cnstStomAndFloodApi, isBusinessNumber} from "../../api/stomAndFlood.ts";
 import RainIcon from '../../assets/images/icon/icon_rain.png';
 import CloseIcon from '../../assets/images/icon/close.png';
 import PrevIcon from '../../assets/images/icon/back.png';
@@ -11,6 +11,8 @@ import CollectDetails from "../privacy/collect.tsx";
 import ProvisionDetails from "../privacy/provision.tsx";
 import MarketingDetails from "../privacy/marketing.tsx";
 import DaumPost from "./daumPost.tsx";
+import Loading from "../loading.tsx";
+import {cnstCarApi1001} from "../../api/cnstCar.ts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -127,6 +129,10 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
     const [address, setAddress] = useState<string>('');
     const [buildName, setBuildName] = useState<string>('');
     const [area, setArea] = useState<string>('');
+    const [useType, setUseType] = useState<string>('사업장');
+    const [undergroundYn, setUnderGroundYn] = useState<string>('지하있음');
+    const [buildType, setBuildType] = useState<string>('콘크리트');
+    const [bName, setBName] = useState<string>('');
 
     // 이름 유효성 검사 및 입력 제한 : 숫자입력불가능, 최대 20자 입력가능
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,7 +180,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
     }, []);
 
     //개인정보 유호성검사 실패시 나오는 경고 문구
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (name.length < 2) {
             alert('올바른 성함을 입력해주세요.');
             return;
@@ -191,8 +197,38 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             alert('필수 개인정보 동의에 체크해주세요.');
             return;
         }
+
+
+        let stomParam = {
+            pdtType : 'saf',
+            bNo : bNo,
+            bName : bName,
+            address : address,
+            buildName : buildName,
+            useType : useType,
+            buildType : buildType,
+            undergroundYn : undergroundYn,
+            cName: name,
+            cCell: phone,
+            cMail : email,
+            collect: checkboxes.collect ? 'Y' : 'N',
+            marketing: checkboxes.marketing ? 'Y' : 'N',
+            provision: checkboxes.provision ? 'Y' : 'N',
+        }
+
+        const statusCode = await cnstStomAndFloodApi(stomParam);
+
+
+
+        if(statusCode === '200'){
+            navigateTo('complete')
+        }else {
+            alert("서비스 오류")
+        }
+
         navigateTo('complete');
     };
+
     //사업장정보 유호성검사 실패시 나오는 경고 문구
     const handleSubmit2 = () => {
         if (area.length < 1) {
@@ -203,9 +239,19 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             alert('사업장 주소를 입력해주세요.');
             return;
         }
+
+
         navigateTo('privacy');
     };
-//사업자등록번호 확인
+
+    const handleButtonChange = ( type, selected ) => {
+        type === 'usage' && setUseType(selected);
+        type === 'underground' && setUnderGroundYn(selected);
+        type === 'build' && setBuildType(selected);
+    }
+
+
+    //사업자등록번호 확인
     const onClickHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         //1288716058
@@ -222,13 +268,13 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             "type" : 'json'
         }
         let result: any = await isBusinessNumber(param);
-        console.log(result);
-       /* if (result.length > 0) {
+
+       if (result.company !== null) {
+            setBName(result.company);
             navigateTo('information');  // 유효한 경우 'information' 페이지로 이동
         } else {
             navigateTo('warning');  // 유효하지않은 경우 'warning' 페이지로 이동
-        }*/
-        navigateTo('information');  // 유효한 경우 'information' 페이지로 이동
+        }
     }
     //풍수해보험 메인
     const renderView = () => {
@@ -306,6 +352,8 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                             <div className={'text-lg text-gray-800 px-3 py-2'}>건물 용도</div>
                             <SelectButtonGroup
                                 buttons={usage}
+                                type = {'usage'}
+                                onChange={handleButtonChange}
                                 activeColor="bg-blue-400 text-white rounded-xl w-[280px] h-[45px]"
                                 inactiveColor="text-gray-400 border-inherit border-2 rounded-xl w-[280px] h-[45px]"
                             />
@@ -314,6 +362,8 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                             <div className={'text-lg text-gray-800 px-3 py-2'}>지하소재 여부</div>
                             <SelectButtonGroup
                                 buttons={underground}
+                                type = {'underground'}
+                                onChange={handleButtonChange}
                                 activeColor="bg-blue-400 text-white rounded-xl w-[280px] h-[45px]"
                                 inactiveColor="text-gray-400 border-inherit border-2 rounded-xl w-[280px] h-[45px]"
                             />
@@ -322,6 +372,8 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                             <div className={'text-lg text-gray-800 px-3 py-2'}>건축물 유형</div>
                             <SelectButtonGroup
                                 buttons={build}
+                                type = {'build'}
+                                onChange={handleButtonChange}
                                 activeColor="bg-blue-400 text-white rounded-xl w-[280px] h-[45px]"
                                 inactiveColor="text-gray-400 border-inherit border-2 rounded-xl w-[280px] h-[45px]"
                             />
