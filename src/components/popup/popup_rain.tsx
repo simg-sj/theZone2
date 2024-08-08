@@ -11,8 +11,6 @@ import CollectDetails from "../privacy/collect.tsx";
 import ProvisionDetails from "../privacy/provision.tsx";
 import MarketingDetails from "../privacy/marketing.tsx";
 import DaumPost from "./daumPost.tsx";
-import Loading from "../loading.tsx";
-import {cnstCarApi1001} from "../../api/cnstCar.ts";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -228,7 +226,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             bName : bName,
             address : address,
             buildName : buildName,
-            bank: bank,
+            cBank: bank,
             userType : userType === '개인' ? '01' : '02',
             useType : useType,
             buildType : buildType,
@@ -242,13 +240,12 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             provision: checkboxes.provision ? 'Y' : 'N',
         }
 
-        const statusCode = await cnstStomAndFloodApi(stomParam);
+        const {statusCode} = await cnstStomAndFloodApi(stomParam);
 
 
-        console.log(stomParam)
         if(statusCode === '200'){
 
-           // navigateTo('complete')
+           navigateTo('complete')
         }else {
             alert("서비스 오류")
         }
@@ -296,9 +293,8 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             "type" : 'json'
         }
         let result: any = await isBusinessNumber(param);
-
-       if (result.company !== null) {
-            setBName(result.company);
+       if (result[0].company !== null) {
+            setBName(result[0].company);
             navigateTo('information');  // 유효한 경우 'information' 페이지로 이동
         } else {
             navigateTo('warning');  // 유효하지않은 경우 'warning' 페이지로 이동
