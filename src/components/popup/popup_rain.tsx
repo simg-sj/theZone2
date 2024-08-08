@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
 import Button from "../button.tsx";
 import {cnstStomAndFloodApi, isBusinessNumber} from "../../api/stomAndFlood.ts";
 import RainIcon from '../../assets/images/icon/icon_rain.png';
@@ -54,6 +54,11 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
         setViewHistory(prev => prev.length > 1 ? prev.slice(0, -1) : prev);
     }
     const currentView = viewHistory[viewHistory.length - 1];
+    //버튼선택
+    const user = [
+        {id: 'personal', text: "개인"},
+        {id: 'corporate', text: "법인", className: "ml-10"},
+    ];
     //버튼선택
     const usage = [
         {id: 'workspace', text: "사업장"},
@@ -129,10 +134,19 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
     const [address, setAddress] = useState<string>('');
     const [buildName, setBuildName] = useState<string>('');
     const [area, setArea] = useState<string>('');
+    const [bank, setBank] = useState<string>('');
+    const [userType, setUserType] = useState<string>('개인');
     const [useType, setUseType] = useState<string>('사업장');
     const [undergroundYn, setUnderGroundYn] = useState<string>('지하있음');
     const [buildType, setBuildType] = useState<string>('콘크리트');
     const [bName, setBName] = useState<string>('');
+
+    // 희망은행 유효성 검사 및 입력 제한 : 숫자입력불가능, 최대 20자 입력가능
+    const handleBankChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        const noNumbersValue = value.replace(/[0-9]/g, '');
+        setBank(noNumbersValue.slice(0, 20)); // 최대 20자로 제한
+    };
 
     // 이름 유효성 검사 및 입력 제한 : 숫자입력불가능, 최대 20자 입력가능
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -181,6 +195,10 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
 
     //개인정보 유호성검사 실패시 나오는 경고 문구
     const handleSubmit = async () => {
+        if (bank.length < 1) {
+            alert('결제 희망 은행을 입력해주세요.');
+            return;
+        }
         if (name.length < 2) {
             alert('올바른 성함을 입력해주세요.');
             return;
@@ -197,6 +215,10 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             alert('필수 개인정보 동의에 체크해주세요.');
             return;
         }
+        if (!checkboxes.collect || !checkboxes.provision) {
+            alert('필수 개인정보 동의에 체크해주세요.');
+            return;
+        }
 
 
         let stomParam = {
@@ -205,6 +227,8 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             bName : bName,
             address : address,
             buildName : buildName,
+            bank: bank,
+            userType : userType,
             useType : useType,
             buildType : buildType,
             undergroundYn : undergroundYn,
@@ -244,7 +268,8 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
         navigateTo('privacy');
     };
 
-    const handleButtonChange = ( type, selected ) => {
+    const handleButtonChange = ( type:string, selected:string) => {
+        type === 'user' && setUserType(selected);
         type === 'usage' && setUseType(selected);
         type === 'underground' && setUnderGroundYn(selected);
         type === 'build' && setBuildType(selected);
@@ -311,6 +336,16 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBName(e.currentTarget.value)}/>
                         </div>*/}
                         <div className={'mt-7'}>
+                            <div className={'text-lg text-gray-800 px-3 py-2'}>가입 대상</div>
+                            <SelectButtonGroup
+                                buttons={user}
+                                type={'user'}
+                                onChange={handleButtonChange}
+                                activeColor="bg-blue-400 text-white rounded-xl w-[280px] h-[45px]"
+                                inactiveColor="text-gray-400 border-inherit border-2 rounded-xl w-[280px] h-[45px]"
+                            />
+                        </div>
+                        <div className={'mt-5'}>
                             <div className={'text-lg text-gray-800 px-3 py-2'}>사업자등록번호</div>
                             <input type={"number"} className={'w-full h-[35px] p-5 rounded-xl'} maxLength={10}
                                    onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -445,9 +480,20 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                                 placeholder="계약에 필요한 안내 및 서류를 전달드립니다"
                             />
                         </div>
+                        <div className={'mt-3 relative'}>
+                            <div className={'text-lg text-gray-800 px-3 py-2'}>결제 희망 은행</div>
+                            <input
+                                type="text"
+                                className={'w-full h-[35px] p-5 rounded-xl'}
+                                value={bank}
+                                onChange={handleBankChange}
+                                placeholder="계좌이체 결제시 희망하는 은행명을 입력해주세요"
+                            />
+                            <div className={'absolute top-[53px] right-5'}>은행</div>
+                        </div>
                         {/*개인정보활용 동의*/}
                         <div>
-                            <label className={'mt-5 flex items-center'}>
+                        <label className={'mt-5 flex items-center'}>
                                 <input
                                     type="checkbox"
                                     className={'mr-3 w-4'}
@@ -541,7 +587,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                                  onClick={onClose}/>
                         </div>
                         <div className={'flex flex-col items-center pt-[55px]'}>
-                            <img src={WarningIcon} alt={'warning'} width={80} className={'my-5'}/>
+                        <img src={WarningIcon} alt={'warning'} width={80} className={'my-5'}/>
                             <div className={'font-medium mt-4 text-2xl'}>올바른 사업자 번호가 아닙니다</div>
                             <div className={'text-xl mt-2'}>사업자등록증을 기준으로 사업자 번호를 작성해주세요</div>
                         </div>

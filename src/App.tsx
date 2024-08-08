@@ -21,10 +21,9 @@ const App: React.FC = () => {
                     <div className={'pt-[100px] text-3xl font-semibold'}>고객센터</div>
                     <div className={'pt-[30px] text-xl accent-gray-600 '}>보험료산출, 보험가입, 보험청구 등 보험관련 문의는 해당 보험사에 직접 문의 바랍니다</div>
                     <div className={'flex justify-between mt-12'}>
-                        <CustomerServiceItem title="DB 손해보험" phone="0000-0000" />
-                        <CustomerServiceItem title="KB 손해보험" phone="0000-0000" />
-                        <CustomerServiceItem title="현대해상" phone="0000-0000" />
-                        <CustomerServiceItem title="풍수해보험관련" phone="0000-0000" />
+                        <CustomerServiceItem title="DB 손해보험" phone="1588-0100" />
+                        <CustomerServiceItem title="KB 손해보험" phone="1544-0144" />
+                        <CustomerServiceItem title="SIMG" phone="1670-9170" />
                     </div>
                     {/*E : 고객센터*/}
                 </div>
