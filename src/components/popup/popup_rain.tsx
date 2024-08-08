@@ -229,7 +229,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             address : address,
             buildName : buildName,
             bank: bank,
-            userType : userType,
+            userType : userType === '개인' ? '01' : '02',
             useType : useType,
             buildType : buildType,
             undergroundYn : undergroundYn,
