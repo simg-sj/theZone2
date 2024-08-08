@@ -1,4 +1,4 @@
-import React, {SetStateAction, useState} from 'react';
+import React, { useState} from 'react';
 
 //SelectButton 컴포넌트 Props 타입 정의
 interface SelectButtonProps {
@@ -13,7 +13,6 @@ interface SelectButtonProps {
 
 //SelectButton 컴포넌트 정의
 const SelectButton: React.FC<SelectButtonProps> = ({
-                                                       id,
                                                        text,
                                                        isActive,
                                                        onClick,

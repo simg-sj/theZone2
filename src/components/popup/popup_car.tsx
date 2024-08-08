@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback} from 'react';
 import Button from "../button.tsx";
 import ProvisionDetails from "../privacy/provision.tsx";
 import MarketingDetails from "../privacy/marketing.tsx";
@@ -159,13 +159,13 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
         }
 
         console.log(params);
-        const statusCode = await cnstCarApi1001(params);
+        const {statusCode} = await cnstCarApi1001(params);
 
 
         console.log(statusCode)
 
         if(statusCode === '200'){
-            //navigateTo('complete')
+            navigateTo('complete')
         }else {
             alert("서비스 오류")
         }
@@ -193,6 +193,7 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
                         <div className={'mt-7'}>
                             <div className={'text-lg text-gray-800 px-3 py-2'}>가입 대상</div>
                             <SelectButtonGroup
+                                type={''}
                                 buttons={user}
                                 activeColor="bg-blue-400 text-white rounded-xl w-[255px] h-[45px]"
                                 inactiveColor="text-gray-400 border-inherit border-2 rounded-xl w-[255px] h-[45px]"
