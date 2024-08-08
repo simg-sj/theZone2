@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import React, {SetStateAction, useState} from 'react';
 
 //SelectButton 컴포넌트 Props 타입 정의
 interface SelectButtonProps {
-    id: string | number;
-    text: string;
-    isActive: boolean;
-    onClick: (id: string | number) => void;
-    activeColor: string;
-    inactiveColor: string;
-    className?: string;
+    id: string | number,
+    text: string,
+    isActive: boolean,
+    onClick: (id: string | number) => void,
+    activeColor: string,
+    inactiveColor: string,
+    className?: string,
 }
 
 //SelectButton 컴포넌트 정의
@@ -19,7 +19,7 @@ const SelectButton: React.FC<SelectButtonProps> = ({
                                                        onClick,
                                                        activeColor,
                                                        inactiveColor,
-                                                       className
+                                                       className,
                                                    }) => {
     return (
         <button
@@ -28,7 +28,7 @@ const SelectButton: React.FC<SelectButtonProps> = ({
         ${isActive ? activeColor : inactiveColor}
         ${className || ''}
       `.trim()}
-            onClick={() => onClick(id)}
+            onClick={() => onClick(text)}
         >
             {text}
         </button>
@@ -47,32 +47,34 @@ const SelectButton: React.FC<SelectButtonProps> = ({
 interface SelectButtonGroupProps {
     buttons: Array<{ id: string; text: string; className?: string }>,
     activeColor: string,
+    type : string,
     inactiveColor: string,
-    onChange: (selected: string) => void;
+    onChange: (type : string ,selected: string) => void;
 }
 
 //SelectButtonGroup 컴포넌트 정의
-const SelectButtonGroup: React.FC<SelectButtonGroupProps> = ({buttons, activeColor, inactiveColor, onChange}) => {
+const SelectButtonGroup: React.FC<SelectButtonGroupProps> = ({buttons,type, activeColor, inactiveColor, onChange}) => {
     // 현재 활성화된 버튼의 ID를 저장하는 상태 (초기 상태를 첫 번째 버튼의 id로 설정)
-    const [activeButtonId, setActiveButtonId] = useState<string | number>(buttons[0].id);
+    const [activeButtonId, setActiveButtonId] = useState<string | number>(buttons[0].text);
 
     //버튼 클릭시 동작
-    const handleButtonClick = (id: string | number): void => {
-        setActiveButtonId(id);
-        onChange(id.toString()); // 부모 컴포넌트에 선택된 값을 전달
+    const handleButtonClick = (text: string | number): void => {
+        setActiveButtonId(text);
+        onChange(type , text.toString()); // 부모 컴포넌트에 선택된 값을 전달
     };
 
     return (
-        <div>
-            {buttons.map((button) => (
-                <SelectButton
-                    key={button.id}
-                    {...button}
-                    isActive={activeButtonId === button.id} //현재 버튼이 활성화 된 상태인지 확인
-                    onClick={handleButtonClick}
-                    activeColor={activeColor}
-                    inactiveColor={inactiveColor}
-                />
+        <div className='flex'>
+            {buttons.map((button, index) => (
+                <div key={index}>
+                    <SelectButton
+                        {...button}
+                        isActive={activeButtonId === button.text} //현재 버튼이 활성화 된 상태인지 확인
+                        onClick={handleButtonClick}
+                        activeColor={activeColor}
+                        inactiveColor={inactiveColor}
+                    />
+                </div>
             ))}
         </div>
     );
