@@ -30,7 +30,7 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
         {id: 'personal', text: "개인"},
         {id: 'corporate', text: "법인", className: "ml-10"},
     ];
-    const [userType, setUserType] = useState<'personal' | 'corporate'>('personal');
+    const [userType, setUserType] = useState<string>('personal');
 
 
     //케이스따라 팝업 내용변경, 뒤로가기 구현
@@ -151,20 +151,21 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
         let params = {
             pdtType : 'car',
             cName: name,
+            businessType : userType,
             cCell: phone,
             collect: checkboxes.collect ? 'Y' : 'N',
             marketing: checkboxes.marketing ? 'Y' : 'N',
             provision: checkboxes.provision ? 'Y' : 'N',
         }
 
-
+        console.log(params);
         const statusCode = await cnstCarApi1001(params);
 
 
         console.log(statusCode)
 
         if(statusCode === '200'){
-            navigateTo('complete')
+            //navigateTo('complete')
         }else {
             alert("서비스 오류")
         }

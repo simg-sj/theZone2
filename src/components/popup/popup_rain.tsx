@@ -27,15 +27,16 @@ type ViewType = 'main' | 'information' | 'address' | 'privacy' | 'warning' | 'co
 
 //상품안내 미리보기 뷰어 열기
 const openProductGuideViewer = () => {
-    const pdfUrl = 'https://풍수해보험상품안내_DB.pdf'; //공개서버 pdf 업로드 후 사용
+    const pdfUrl = 'https://douzone.simg.kr/풍수해보험상품안내_DB.pdf'; //공개서버 pdf 업로드 후 사용
     const viewerUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(pdfUrl)}`;
     window.open(viewerUrl, '_blank', 'width=800,height=600');
 };
 //보험약관 다운받기
 const downloadInsuranceTerms = () => {
     const link = document.createElement('a');
-    link.href = 'https://풍수해보험약관_DB.pdf'; //공개서버 pdf 업로드 후 사용
+    link.href = 'https://douzone.simg.kr/DB_소상공인_풍수해보험_약관.pdf'; //공개서버 pdf 업로드 후 사용
     link.download = '풍수해보험약관.pdf';
+    link.target= '_blank';
     link.click();
 };
 
@@ -209,6 +210,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             buildType : buildType,
             undergroundYn : undergroundYn,
             cName: name,
+            area : area,
             cCell: phone,
             cMail : email,
             collect: checkboxes.collect ? 'Y' : 'N',
@@ -219,14 +221,15 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
         const statusCode = await cnstStomAndFloodApi(stomParam);
 
 
-
+        console.log(stomParam)
         if(statusCode === '200'){
-            navigateTo('complete')
+
+           // navigateTo('complete')
         }else {
             alert("서비스 오류")
         }
 
-        navigateTo('complete');
+        //navigateTo('complete');
     };
 
     //사업장정보 유호성검사 실패시 나오는 경고 문구
