@@ -153,6 +153,7 @@ export const CarPopup: React.FC<PopupProps> = ({onClose}) => {
             cName: name,
             businessType : userType === 'personal' ? '01' : '02',
             cCell: phone,
+            memo : desiredInsurance,
             collect: checkboxes.collect ? 'Y' : 'N',
             marketing: checkboxes.marketing ? 'Y' : 'N',
             provision: checkboxes.provision ? 'Y' : 'N',

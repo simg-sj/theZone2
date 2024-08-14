@@ -142,7 +142,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
 
     // 희망은행 유효성 검사 및 입력 제한 : 숫자입력불가능, 최대 20자 입력가능
     const handleBankChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
+        const value = e.currentTarget.value;
         const noNumbersValue = value.replace(/[0-9]/g, '');
         setBank(noNumbersValue.slice(0, 20)); // 최대 20자로 제한
     };
@@ -239,7 +239,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             marketing: checkboxes.marketing ? 'Y' : 'N',
             provision: checkboxes.provision ? 'Y' : 'N',
         }
-
+        console.log(stomParam)
         const {statusCode} = await cnstStomAndFloodApi(stomParam);
 
 
