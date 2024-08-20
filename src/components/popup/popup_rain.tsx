@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import Button from "../button.tsx";
 import {cnstStomAndFloodApi, isBusinessNumber} from "../../api/stomAndFlood.ts";
 import RainIcon from '../../assets/images/icon/icon_rain.png';
@@ -43,7 +43,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
     const [viewHistory, setViewHistory] = useState<ViewType[]>(['main']);
     const [bNo, setBNo] = useState<string>('');
     //const [bName, setBName] = useState<string>('');
-
+    const nameRef = useRef<HTMLInputElement | null>(null);
 
     const navigateTo = (view: ViewType) => {
         setViewHistory(prev => [...prev, view]);
@@ -139,7 +139,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
     const [undergroundYn, setUnderGroundYn] = useState<string>('지하있음');
     const [buildType, setBuildType] = useState<string>('콘크리트');
     const [bName, setBName] = useState<string>('');
-
+    const [postNum, setPostNum] = useState<string>('');
     // 희망은행 유효성 검사 및 입력 제한 : 숫자입력불가능, 최대 20자 입력가능
     const handleBankChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
@@ -192,6 +192,16 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
         return emailRegex.test(email);
     }, []);
 
+    useEffect(()=>{
+        let size = viewHistory.length;
+        if(viewHistory[size-1] === 'privacy'){
+            if(nameRef.current){
+                nameRef.current.focus();
+                nameRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }
+        }
+    }, [viewHistory])
+
     //개인정보 유호성검사 실패시 나오는 경고 문구
     const handleSubmit = async () => {
         if (bank.length < 1) {
@@ -227,6 +237,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             address : address,
             buildName : buildName,
             cBank: bank,
+            postNum : postNum,
             userType : userType === '개인' ? '01' : '02',
             useType : useType,
             buildType : buildType,
@@ -239,7 +250,8 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             marketing: checkboxes.marketing ? 'Y' : 'N',
             provision: checkboxes.provision ? 'Y' : 'N',
         }
-        console.log(stomParam)
+
+
         const {statusCode} = await cnstStomAndFloodApi(stomParam);
 
 
@@ -263,6 +275,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             alert('사업장 주소를 입력해주세요.');
             return;
         }
+
 
 
         navigateTo('privacy');
@@ -289,11 +302,13 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             ]
         };*/
         let param = {
+            "gb" : userType === '개인' ? '1' : '2',
             "q" : bNo,
             "type" : 'json'
         }
         let result: any = await isBusinessNumber(param);
-       if (result[0].company !== null) {
+
+       if (result.length > 0) {
             setBName(result[0].company);
             navigateTo('information');  // 유효한 경우 'information' 페이지로 이동
         } else {
@@ -344,6 +359,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                                 inactiveColor="text-gray-400 border-inherit border-2 rounded-xl w-[280px] h-[45px]"
                             />
                         </div>
+
                         <div className={'mt-5'}>
                             <div className={'text-lg text-gray-800 px-3 py-2'}>사업자등록번호</div>
                             <input type={"number"} className={'w-full h-[35px] p-5 rounded-xl'} maxLength={10}
@@ -428,7 +444,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
             case 'address':
                 return (
                         <div className={'mt-7 h-[600px]'}>
-                            <DaumPost goBack={goBack} onClose={onClose} setAddress={setAddress} setBuildName={setBuildName} />
+                            <DaumPost goBack={goBack} onClose={onClose} setAddress={setAddress} setBuildName={setBuildName} setPostNum={setPostNum}/>
                         </div>
                 );
             //풍수해보험 개인정보처리동의
@@ -449,12 +465,13 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                                 </div>
                             </div>
                         </div>
-                        <div className={'mt-7'}>
+                        <div className={'mt-7'} >
                             <div className={'text-lg text-gray-800 px-3 py-2'}>성함</div>
                             <input
                                 type="text"
                                 className={'w-full h-[35px] p-5 rounded-xl'}
                                 value={name}
+                                ref={nameRef}
                                 onChange={handleNameChange}
                                 placeholder="연락 받으실 분 성함을 입력해주세요"
                             />
@@ -492,7 +509,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                         </div>
                         {/*개인정보활용 동의*/}
                         <div>
-                        <label className={'mt-5 flex items-center'}>
+                            <label className={'mt-5 flex items-center'}>
                                 <input
                                     type="checkbox"
                                     className={'mr-3 w-4'}
@@ -586,7 +603,7 @@ export const RainPopup: React.FC<PopupProps> = ({onClose}) => {
                                  onClick={onClose}/>
                         </div>
                         <div className={'flex flex-col items-center pt-[55px]'}>
-                        <img src={WarningIcon} alt={'warning'} width={80} className={'my-5'}/>
+                            <img src={WarningIcon} alt={'warning'} width={80} className={'my-5'}/>
                             <div className={'font-medium mt-4 text-2xl'}>올바른 사업자 번호가 아닙니다</div>
                             <div className={'text-xl mt-2'}>사업자등록증을 기준으로 사업자 번호를 작성해주세요</div>
                         </div>

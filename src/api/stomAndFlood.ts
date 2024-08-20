@@ -2,7 +2,7 @@
  * @Author: rlarlejrwl56 63471869+rlarlejrwl56@users.noreply.github.com
  * @Date: 2024-07-30 13:54:39
  * @LastEditors: rlarlejrwl56 63471869+rlarlejrwl56@users.noreply.github.com
- * @LastEditTime: 2024-08-08 17:32:23
+ * @LastEditTime: 2024-08-16 14:41:04
  * @FilePath: src/api/stomAndFlood.ts
  * @Description: 这是默认设置,可以在设置》工具》File Description中进行配置
  */
@@ -18,8 +18,7 @@ export const isBusinessNumber = async(params : any) : Promise<businessType[] > =
         /*let serviceKey = 'ai5a6pvD0V3lvsdTXpIhd2zbh5PL8n4nNgfJ4se1Qy2UQwMcSQgYgcg3O7PgU4ZAwX2B65h%2BwgBnRTYFnOLjpw%3D%3D';
         let baseUrl = `https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=${serviceKey}`;*/
         let serviceKey  = 'cmxhcmxlanIzMTc4QG5hdmVyLmNvbSAg';
-        const {data } =  await bussinessCheckApi.post<ResultBusinessType>(`fapi?key=${serviceKey}&q=${params.q}&type=${params.type}`);
-        console.log(data);
+        const {data } =  await bussinessCheckApi.post<ResultBusinessType>(`fapi?key=${serviceKey}&gb=${params.gb}&q=${params.q}&type=${params.type}`);
         if(typeof data === 'object' && Array.isArray(data.items)){
             return data.items;
         }else {

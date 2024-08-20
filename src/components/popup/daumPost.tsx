@@ -2,7 +2,7 @@
  * @Author: rlarlejrwl56 63471869+rlarlejrwl56@users.noreply.github.com
  * @Date: 2024-08-05 14:52:30
  * @LastEditors: rlarlejrwl56 63471869+rlarlejrwl56@users.noreply.github.com
- * @LastEditTime: 2024-08-05 16:58:02
+ * @LastEditTime: 2024-08-20 13:45:20
  * @FilePath: src/components/popup/daumPost.tsx
  * @Description: 这是默认设置,可以在设置》工具》File Description中进行配置
  */
@@ -17,14 +17,15 @@ interface Props {
     onClose : any
     setAddress : React.Dispatch<SetStateAction<string>>
     setBuildName : React.Dispatch<SetStateAction<string>>
-
+    setPostNum : React.Dispatch<SetStateAction<string>>
 }
 
-const DaumPost = ({ goBack, onClose, setAddress, setBuildName}: Props) => {
+const DaumPost = ({ goBack, onClose, setAddress, setBuildName, setPostNum}: Props) => {
     const onCompletePost = (data : any) => {
         console.log(data);
         setAddress(data.address);
         setBuildName(data.buildingName);
+        setPostNum(data.zonecode);
         goBack();
     }    
 

@@ -1,20 +1,72 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './assets/common.css';
 import CardList from './components/cardlist';
+import {useDispatch} from "react-redux";
+import {loadingActions} from "./redux/slice/authSlice.ts";
+import {bussinessCheckApi, consultCarApi, stomAndFloodApi} from "./api/axiosInstance.ts";
 
 
 const App: React.FC = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
 
+        stomAndFloodApi.interceptors.request.use(function (config) {
+            dispatch(loadingActions.GLOBAL_LOADING());
+            return config;
+        }, function(error){
+            dispatch(loadingActions.GLOBAL_LOADED());
+            return Promise.reject(error);
+        })
+        stomAndFloodApi.interceptors.response.use((config) => {
+            dispatch(loadingActions.GLOBAL_LOADED());
+            return config;
+        },(error) => {
+            dispatch(loadingActions.GLOBAL_LOADED());
+            return Promise.reject(error)
+        })
+
+        bussinessCheckApi.interceptors.request.use(function (config) {
+            dispatch(loadingActions.GLOBAL_LOADING());
+            return config;
+        }, function(error){
+            dispatch(loadingActions.GLOBAL_LOADED());
+            return Promise.reject(error);
+        })
+        bussinessCheckApi.interceptors.response.use((config) => {
+            dispatch(loadingActions.GLOBAL_LOADED());
+            return config;
+        },(error) => {
+            dispatch(loadingActions.GLOBAL_LOADED());
+            return Promise.reject(error)
+        })
+
+        consultCarApi.interceptors.request.use(function (config) {
+            dispatch(loadingActions.GLOBAL_LOADING());
+            return config;
+        }, function(error){
+            dispatch(loadingActions.GLOBAL_LOADED());
+            return Promise.reject(error);
+        })
+        consultCarApi.interceptors.response.use((config) => {
+            dispatch(loadingActions.GLOBAL_LOADED());
+            return config;
+        },(error) => {
+            dispatch(loadingActions.GLOBAL_LOADED());
+            return Promise.reject(error)
+        })
+
+
+    }, []);
 
     return (
             <main className={'my-8'}>
-                <div className={'w-[1160px] h-[1600px]  mx-auto'}>
+                <div className={'mx-auto'}>
                     {/*S : 배너*/}
                     <div className={'banner'}></div>
                     {/*E : 배너*/}
                     {/*S : 상품안내*/}
                     <div className={'pt-[60px] text-3xl  font-semibold'}>찾으시는 상품이 있나요 ?</div>
-                    <div className={'pt-[30px] text-xl accent-gray-600 '}>더존비즈온에서 필요한 보험을 맞춤형으로 가입하세요</div>
+                    <div className={'pt-[30px] text-xl accent-gray-600 '}>더존비앤에프에서 필요한 보험을 맞춤형으로 가입하세요</div>
                     <CardList />
                     {/*E : 상품안내*/}
                     {/*S : 고객센터*/}

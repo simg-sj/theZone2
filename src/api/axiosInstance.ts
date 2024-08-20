@@ -2,7 +2,7 @@
  * @Author: rlarlejrwl56 63471869+rlarlejrwl56@users.noreply.github.com
  * @Date: 2024-08-05 16:20:18
  * @LastEditors: rlarlejrwl56 63471869+rlarlejrwl56@users.noreply.github.com
- * @LastEditTime: 2024-08-06 14:59:44
+ * @LastEditTime: 2024-08-20 13:42:34
  * @FilePath: src/api/axiosInstance.ts
  * @Description: 这是默认设置,可以在设置》工具》File Description中进行配置
  */
@@ -32,6 +32,8 @@ const stomAndFloodApi = axios.create({
     },
     timeout: 10000,
 })
+
+
 
 
 export {bussinessCheckApi, consultCarApi, stomAndFloodApi};

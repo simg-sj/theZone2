@@ -10,9 +10,7 @@
     box-sizing: border-box;
 }
 
-main {
-    width: 100vw;
-}
+
 
 /*기본세팅 - 입력창*/
 input, textarea, select {
@@ -45,11 +43,12 @@ select, input {
     background-image: url("../public/douzone_banner.png");
     height: 420px;
     border-radius: 15px;
+    background-repeat: no-repeat;
 }
 
 /*스크롤 커스텀*/
 ::-webkit-scrollbar {
-    width: 12px; /* 스크롤바의 너비 */
+    width: 8px; /* 스크롤바의 너비 */
 }
 
 ::-webkit-scrollbar-thumb {
