@@ -1,62 +1,11 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './assets/common.css';
 import CardList from './components/cardlist';
-import {useDispatch} from "react-redux";
-import {loadingActions} from "./redux/slice/authSlice.ts";
-import {bussinessCheckApi, consultCarApi, stomAndFloodApi} from "./api/axiosInstance.ts";
+import {useAxiosInterceptors} from "./api/axiosInstance.ts";
 
 
 const App: React.FC = () => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-
-        stomAndFloodApi.interceptors.request.use(function (config) {
-            dispatch(loadingActions.GLOBAL_LOADING());
-            return config;
-        }, function(error){
-            dispatch(loadingActions.GLOBAL_LOADED());
-            return Promise.reject(error);
-        })
-        stomAndFloodApi.interceptors.response.use((config) => {
-            dispatch(loadingActions.GLOBAL_LOADED());
-            return config;
-        },(error) => {
-            dispatch(loadingActions.GLOBAL_LOADED());
-            return Promise.reject(error)
-        })
-
-        bussinessCheckApi.interceptors.request.use(function (config) {
-            dispatch(loadingActions.GLOBAL_LOADING());
-            return config;
-        }, function(error){
-            dispatch(loadingActions.GLOBAL_LOADED());
-            return Promise.reject(error);
-        })
-        bussinessCheckApi.interceptors.response.use((config) => {
-            dispatch(loadingActions.GLOBAL_LOADED());
-            return config;
-        },(error) => {
-            dispatch(loadingActions.GLOBAL_LOADED());
-            return Promise.reject(error)
-        })
-
-        consultCarApi.interceptors.request.use(function (config) {
-            dispatch(loadingActions.GLOBAL_LOADING());
-            return config;
-        }, function(error){
-            dispatch(loadingActions.GLOBAL_LOADED());
-            return Promise.reject(error);
-        })
-        consultCarApi.interceptors.response.use((config) => {
-            dispatch(loadingActions.GLOBAL_LOADED());
-            return config;
-        },(error) => {
-            dispatch(loadingActions.GLOBAL_LOADED());
-            return Promise.reject(error)
-        })
-
-
-    }, []);
+    useAxiosInterceptors();
 
     return (
             <main className={'my-8'}>
